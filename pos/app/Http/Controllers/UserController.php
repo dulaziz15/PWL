@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\UserModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index($id, $user) {
-        return view('user.index')
-            ->with('id', $id)
-            ->with('name', $user);
+    public function index()
+    {
+        $data = [
+            'nama' => 'Pelanggan Pertama'
+        ];
+        UserModel::where('username', 'customer-1')->update($data);
+        $user = UserModel::all();
+        return view('user.index', ['data' => $user]);
     }
 }
