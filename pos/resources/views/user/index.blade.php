@@ -9,14 +9,6 @@
         <h1>Data User</h1>
         <table border="1" cellpadding="2" cellspacing="0">
             <tr>
-                <th>jumlah Pengguna</th>
-            </tr>
-            <tr>
-                <td>{{ $data }}</td>
-            </tr>
-        </table>
-        {{-- <table border="1" cellpadding="2" cellspacing="0">
-            <tr>
                 <th>ID</th>
                 <th>Username</th>
                 <th>Nama</th>
@@ -28,7 +20,7 @@
                     <td>{{ $data->nama }}</td>
                     <td>{{ $data->level_id }}</td>
                 </tr>
-        </table> --}}
+        </table>
     </body>
 
     </html>
