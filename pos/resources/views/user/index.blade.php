@@ -1,35 +1,75 @@
-<!DOCTYPE html>
-<html>
+@extends('layouts.template')
 
-<head>
-    <title>Data User</title>
-</head>
+@section('content')
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <h3 class="card-title">{{ $page->title }}</h3>
+            <div class="card-tools">
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('user/create') }}">Tambah</a>
+            </div>
+        </div>
+        <div class="card-body">
+            @if (session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_user">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Nama</th>
+                        <th>Level</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+@endsection
 
-<body>
-    <h1>Data User</h1>
-    <a href="/user/tambah">+ Tambah User</a>
-    <table border="1" cellpadding="2" cellspacing="0">
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Nama</th>
-            <th>ID Level Pengguna</th>
-            <th>Kode Level</th>
-            <th>Nama Level</th>
-            <th>Aksi</th>
-        </tr>
-        @foreach ($data as $d)
-            <tr>
-                <td>{{ $d->user_id }}</td>
-                <td>{{ $d->username }}</td>
-                <td>{{ $d->nama }}</td>
-                <td>{{ $d->level_id }}</td>
-                <td>{{ $d->level->level_code }}</td>
-                <td>{{ $d->level->level_nama }}</td>
-                <td><a href="/user/ubah/{{ $d->user_id }}">Ubah</a> | <a href="/user/hapus/{{ $d->user_id }}">Hapus</a></td>
-            </tr>
-        @endforeach
-    </table>
-</body>
+@push('css')
+@endpush
 
-</html>
+@push('js')
+    <script>
+        $(document).ready(function() {
+            var dataUser = $('#table_user').DataTable({
+                serverSide: true,
+                ajax: {
+                    'url': "{{ url('user/list') }}",
+                    'dataType': "json",
+                    'type': "POST"
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'text-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: "username",
+                    className: "",
+                    orderable: true,
+                    searchable: true
+                }, {
+                    data: "nama",
+                    className: "",
+                    orderable: true,
+                    searchable: true
+                }, {
+                    data: "level.level_nama",
+                    className: "",
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: "aksi",
+                    className: "",
+                    orderable: false,
+                    searchable: false
+                }]
+            });
+        });
+    </script>
+@endpush
