@@ -86,28 +86,6 @@ class BarangController extends Controller
         return view('barang.create_ajax')->with('kategori', $kategori);
     }
 
-    public function store(Request $request)
-    {
-
-        $request->validate([
-            'barang_kode' => 'required|string|min:3|unique:m_barang,barang_kode',
-            'barang_nama' => 'required|string|max: 100',
-            'harga_jual' => 'required|integer',
-            'harga_beli' => 'required|integer',
-            'kategori_id' => 'required|integer',
-        ]);
-
-        BarangModel::create([
-            'barang_kode' => $request->barang_kode,
-            'barang_nama' => $request->barang_nama,
-            'harga_jual' => $request->harga_jual,
-            'harga_beli' => $request->harga_beli,
-            'kategori_id' => $request->kategori_id
-        ]);
-
-        return redirect('/barang')->with('success', 'Data barang berhasil disimpan');
-    }
-
     public function store_ajax(Request $request)
     {
         // cek apakah request berupa ajax
@@ -137,6 +115,28 @@ class BarangController extends Controller
             ]);
         }
         redirect('/barang');
+    }
+
+    public function store(Request $request)
+    {
+
+        $request->validate([
+            'barang_kode' => 'required|string|min:3|unique:m_barang,barang_kode',
+            'barang_nama' => 'required|string|max: 100',
+            'harga_jual' => 'required|integer',
+            'harga_beli' => 'required|integer',
+            'kategori_id' => 'required|integer',
+        ]);
+
+        BarangModel::create([
+            'barang_kode' => $request->barang_kode,
+            'barang_nama' => $request->barang_nama,
+            'harga_jual' => $request->harga_jual,
+            'harga_beli' => $request->harga_beli,
+            'kategori_id' => $request->kategori_id
+        ]);
+
+        return redirect('/barang')->with('success', 'Data barang berhasil disimpan');
     }
 
     public function show(string $id)

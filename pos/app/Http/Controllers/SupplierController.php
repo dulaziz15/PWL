@@ -143,13 +143,6 @@ class SupplierController extends Controller
         return view('supplier.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'supplier' => $supplier, 'activeMenu' => $activeMenu]);
     }
 
-    public function show_ajax(string $id)
-    {
-        $supplier = SupplierModel::find($id);
-
-        return view('supplier.show_ajax', ['supplier' => $supplier]);
-    }
-
     public function edit(string $id)
     {
         $supplier = SupplierModel::find($id);
@@ -166,6 +159,13 @@ class SupplierController extends Controller
         $activeMenu = 'supplier'; // set menu yang sedang aktif
 
         return view('supplier.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'supplier' => $supplier, 'activeMenu' => $activeMenu]);
+    }
+
+    public function show_ajax(string $id)
+    {
+        $supplier = SupplierModel::find($id);
+
+        return view('supplier.show_ajax', ['supplier' => $supplier]);
     }
 
     public function edit_ajax(string $id)
