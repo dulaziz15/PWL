@@ -30,7 +30,7 @@ class SupplierController extends Controller
         $suppliers = SupplierModel::select('supplier_id', 'supplier_kode', 'supplier_nama', 'supplier_alamat');
 
         return DataTables::of($suppliers)
-            ->addIndexColumn() 
+            ->addIndexColumn()
             ->addColumn('aksi', function ($supplier) {
                 // Menambahkan kolom aksi
                 // $btn  = '<a href="' . url('/supplier/' . $supplier->supplier_id) . '" class="btn btn-info btn-sm">Detail</a> ';
@@ -110,8 +110,8 @@ class SupplierController extends Controller
     {
         $request->validate([
             'supplier_kode' => 'required|string|min:3|unique:m_supplier,supplier_kode',
-            'supplier_nama' => 'required|string|max: 100', 
-            'supplier_alamat' => 'required|string|max: 100', 
+            'supplier_nama' => 'required|string|max: 100',
+            'supplier_alamat' => 'required|string|max: 100',
         ]);
 
         SupplierModel::create([
@@ -138,7 +138,7 @@ class SupplierController extends Controller
 
         ];
 
-        $activeMenu = 'supplier'; 
+        $activeMenu = 'supplier';
 
         return view('supplier.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'supplier' => $supplier, 'activeMenu' => $activeMenu]);
     }
@@ -179,8 +179,8 @@ class SupplierController extends Controller
     {
         $request->validate([
             'supplier_kode' => 'required|string|min:3|unique:m_supplier,supplier_kode,' . $id . ',supplier_id',
-            'supplier_nama' => 'required|string|max: 100', 
-            'supplier_alamat' => 'required|string|max: 255', 
+            'supplier_nama' => 'required|string|max: 100',
+            'supplier_alamat' => 'required|string|max: 255',
         ]);
 
         SupplierModel::find($id)->update([
