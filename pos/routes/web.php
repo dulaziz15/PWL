@@ -30,6 +30,8 @@ Route::pattern('id', '[0-9]+'); // artinya ketika ada parameter {id}, maka harus
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin'])->name('login_proses');
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::get('register', [AuthController::class, 'register'])->name('register');
+Route::post('register', [AuthController::class, 'postRegister'])->name('register_proses');
 
 Route::middleware(['auth'])->group(function () {
 
