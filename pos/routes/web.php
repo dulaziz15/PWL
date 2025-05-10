@@ -7,6 +7,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -147,5 +148,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/import_ajax', [SupplierController::class, 'import_ajax']);
         Route::get('/export_excel', [SupplierController::class, 'export_excel']);
         Route::get('/export_pdf', [SupplierController::class, 'export_pdf']);
+    });
+
+    Route::group(['prefix' => 'profil'], function () {
+        Route::get('/',  [ProfilController::class, 'index']);
+        Route::get('/{id}/edit_image',  [ProfilController::class, 'editImage']);
+        Route::put('/{id}/update_image',  [ProfilController::class, 'updateImage']);
     });
 });
