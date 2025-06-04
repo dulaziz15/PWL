@@ -54,11 +54,6 @@ ack">
                         <small id="error-password" class="error-text text-danger"></small>
                     </div>
                     <div class="row">
-                        <div class="col-8">
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="remember"><label for="remember">Remember Me</label>
-                            </div>
-                        </div>
                         <!-- /.col -->
                         <div class="col-4">
                             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
@@ -91,58 +86,86 @@ ack">
             }
         });
         $(document).ready(function() {
+            // Validasi form login dengan jQuery Validate
             $("#form-login").validate({
                 rules: {
-                    username: {
+                    surel: {
                         required: true,
-                        minlength: 4,
-                        maxlength: 20
+                        email: true
                     },
-                    password: {
-                        required: true,
-                        minlength: 5,
-                        maxlength: 20
+                    hash_kata_sandi: {
+                        required: true
                     }
                 },
-                submitHandler: function(form) { // ketika valid, maka bagian yg akan dijalankan
+                messages: {
+                    surel: {
+                        required: "Email wajib diisi",
+                        email: "Masukkan email yang valid"
+                    },
+                    hash_kata_sandi: {
+                        required: "Password wajib diisi"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    if (element.closest('.input-group').length) {
+                        element.closest('.input-group').append(error);
+                    } else {
+                        element.after(error);
+                    }
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
+                },
+                submitHandler: function(form) {
+                    // AJAX POST request
                     $.ajax({
                         url: form.action,
-                        type: form.method,
+                        method: form.method,
                         data: $(form).serialize(),
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        dataType: 'json',
                         success: function(response) {
-                            if (response.status) { // jika sukses
+                            if (response.status) {
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Berhasil',
-                                    text: response.message,
-                                }).then(function() {
-                                    window.location = response.redirect;
+                                    text: response.message
+                                }).then(() => {
+                                    window.location.href = response.redirect;
                                 });
-                            } else { // jika error
+                            } else {
+                                // Clear previous error texts
                                 $('.error-text').text('');
-                                $.each(response.msgField, function(prefix, val) {
-                                    $('#error-' + prefix).text(val[0]);
-                                });
+                                // Tampilkan error field spesifik jika ada
+                                if (response.msgField) {
+                                    $.each(response.msgField, (field, messages) => {
+                                        $('#error-' + field).text(messages[0]);
+                                    });
+                                }
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Terjadi Kesalahan',
                                     text: response.message
                                 });
                             }
+                        },
+                        error: function(xhr, status, error) {
+                            // Tangani error server atau jaringan
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal mengirim data',
+                                text: 'Terjadi kesalahan pada server atau jaringan.'
+                            });
                         }
                     });
-                    return false;
-                },
-                errorElement: 'span',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.input-group').append(error);
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
+                    return false; // prevent default form submit
                 }
             });
         });

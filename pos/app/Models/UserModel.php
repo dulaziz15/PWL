@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserModel extends Authenticatable
 {
+
+    
+
     use HasFactory;
     
     protected $table = 'm_user';
@@ -19,6 +22,14 @@ class UserModel extends Authenticatable
     protected $hidden = ['password'];
 
     protected $casts = ['password' => 'hashed'];
+
+    public function getJWTIdentifier() {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims() {
+        return [];
+    }
 
     public function level(): BelongsTo {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
